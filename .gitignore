@@ -6,5 +6,6 @@ Library/
 Logs/
 obj/
 Temp/
+build/
 Assembly-CSharp.csproj
 pinkman-2d-unity.sln
