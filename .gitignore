@@ -1,0 +1,10 @@
+# .开头的任何文件
+.*
+# 排除 .gitignore 本身
+!/.gitignore
+Library/
+Logs/
+obj/
+Temp/
+Assembly-CSharp.csproj
+pinkman-2d-unity.sln
