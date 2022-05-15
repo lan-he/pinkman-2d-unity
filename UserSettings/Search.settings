@@ -10,6 +10,9 @@ scopes = {
 	"last_search.B064B029" = ""
 	"OpenInspectorPreview.B064B029" = "0"
 	"currentGroup.B064B029" = "all"
+	"last_search.8040E7BB" = ""
+	"OpenInspectorPreview.8040E7BB" = "0"
+	"currentGroup.8040E7BB" = "all"
 }
 providers = {
 	find = {
