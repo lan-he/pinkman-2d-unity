@@ -8,31 +8,29 @@ public class PlayerController : MonoBehaviour
 {
     //[SerializeField] private Rigidbody2D rb; // 缸体 private私有变量
     private Rigidbody2D rb; // 缸体
-
     private Animator anim; // 动画控制器
-
     private Collider2D coll; // 碰撞体
-
+    // 移动
     public int speed; // 声明速度
-
+    private float moveX;
+    private bool facingRight = true;
+    // 跳跃
+    [Range(1, 10)]
     public int jumpForce; // 跳跃系数
+    private bool moveJump; // 跳跃输入
+    private bool jumpHold; // 长按跳跃
+    public bool isGround; // 是否在地面上
+    public int jumpCount = 2; // 跳跃次数
+    private bool isJump; // 传递作用
+    public Transform groundCheck; //地面监测点
+    public LayerMask ground; // 声明碰撞体图层
+    private float fallAddition = 2.5f; // 下落重力加成
+    private float jumpAddition = 1.5f; // 跳跃重力加成
 
-    public bool isGround; // 是否在地面上&是否在跳跃
-
-    public int jumpCount; // 跳跃次数
-
-    public Transform groundCheck1; //地面监测点
-
-    public Transform groundCheck2; //地面监测点
-
-    public LayerMask ground; // 声明碰撞体
 
     public int apple; // 收集apple数量
-
     public TextMeshProUGUI appleText; // 收集apple数量显示
-
     private bool isHurt; // 是否受伤
-
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>(); //缸体赋值
@@ -43,59 +41,87 @@ public class PlayerController : MonoBehaviour
     // Update 每一帧都回执行
     private void Update()
     {
-        isGround =
-            Physics2D.OverlapCircle(groundCheck1.position, 0.1f, ground) ||
-            Physics2D.OverlapCircle(groundCheck2.position, 0.1f, ground); // 判断是否接触地面
-        if (Input.GetButtonDown("Jump"))
-        {
-            Jump(); // 角色跳跃
-        }
+        moveX = Input.GetAxis("Horizontal"); //获取-1~1
+        moveJump = Input.GetButtonDown("Jump"); // 按下就是一次true
+        jumpHold = Input.GetButton("Jump"); // 按住就一直true
 
-        if (!isHurt)
+        if (moveJump && jumpCount > 0)
         {
-            Movement(); // 角色移动
+            isJump = true;
         }
-
         SwitchAnim(); // 动画
     }
 
     // FixedUpdate固定时间执行
     private void FixedUpdate()
     {
+        if (!isHurt)
+        {
+            Movement(); // 角色移动
+        }
+        isGround = Physics2D.OverlapCircle(groundCheck.position, 0.1f, ground); // 判断是否接触地面
+        Jump(); // 角色跳跃
     }
 
-    void Movement()
+    void Movement() // 角色移动
     {
-        //float horizontalMove = Input.GetAxis("Horizontal"); // 获取1到-1之间的数字
-        float horizontalMove = Input.GetAxisRaw("Horizontal"); //获取-1,0,1这三个数
-        rb.velocity = new Vector2(horizontalMove * speed, rb.velocity.y);
-        anim.SetFloat("running", Mathf.Abs(horizontalMove));
-
-        // 调整角色面部朝向
-        if (horizontalMove != 0)
+        rb.velocity = new Vector2(moveX * speed, rb.velocity.y);
+        anim.SetFloat("running", Mathf.Abs(moveX));
+        if ((facingRight == false && moveX > 0) || (facingRight == true && moveX < 0))
         {
-            transform.localScale = new Vector3(horizontalMove, 1, 1);
+            Filp();
         }
         else
         {
             anim.SetBool("idle", true);
         }
     }
-
-    void Jump()
+    private void Filp()
     {
-        //角色跳跃
+        facingRight = !facingRight;
+        Vector3 playerScale = transform.localScale;
+        playerScale.x *= -1;
+        transform.localScale = playerScale;
+    }
+
+    private void Jump()
+    {
         if (isGround)
         {
             jumpCount = 2;
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            jumpCount--;
         }
-        else if (jumpCount > 0 && !isGround)
+        if (isJump)
         {
-            rb.velocity = new Vector2(rb.velocity.x, 10);
+            rb.velocity = Vector2.up * jumpForce;
+            // rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             jumpCount--;
+            isJump = false;
         }
+
+        if (rb.velocity.y < 0)
+        {
+            rb.gravityScale = fallAddition;
+        }
+        else if (rb.velocity.y > 0 && !jumpHold)
+        {
+            rb.gravityScale = jumpAddition;
+        }
+        else
+        {
+            rb.gravityScale = 1f;
+        }
+        // //角色跳跃
+        // if (isGround)
+        // {
+        //     jumpCount = 2;
+        //     rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        //     jumpCount--;
+        // }
+        // else if (jumpCount > 0 && !isGround)
+        // {
+        //     rb.velocity = new Vector2(rb.velocity.x, 10);
+        //     jumpCount--;
+        // }
     }
 
     // 控制动画
@@ -162,14 +188,14 @@ public class PlayerController : MonoBehaviour
                 transform.position.x > collision.gameObject.transform.position.x
             )
             {
-                rb.velocity = new Vector2(10, rb.velocity.y);
+                rb.velocity = new Vector2(6, rb.velocity.y);
                 isHurt = true;
             }
             else if (
                 transform.position.x < collision.gameObject.transform.position.x
             )
             {
-                rb.velocity = new Vector2(-10, rb.velocity.y);
+                rb.velocity = new Vector2(-6, rb.velocity.y);
                 isHurt = true;
             }
         }

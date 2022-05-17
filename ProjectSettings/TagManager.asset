@@ -10,7 +10,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Groundt
+  - MyGround
   - Water
   - UI
   - 
@@ -61,6 +61,9 @@ TagManager:
   - name: New Layer 6
     uniqueID: 2661762179
     locked: 0
-  - name: New Layer 7
+  - name: 12231
     uniqueID: 3381280299
+    locked: 0
+  - name: New Layer 8
+    uniqueID: 462765681
     locked: 0
