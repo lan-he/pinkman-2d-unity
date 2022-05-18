@@ -23,10 +23,10 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1896073975339562365}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.003, y: -0.475, z: 0.10093597}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.012, y: -0.488, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4820496784326776895}
   m_RootOrder: 0
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 4820496784326776895}
   - component: {fileID: 4820496784326776864}
   - component: {fileID: 4820496784326776893}
-  - component: {fileID: 841274158}
+  - component: {fileID: 1290621684}
   - component: {fileID: 4820496784326776891}
   - component: {fileID: 4820496784326776892}
   m_Layer: 0
@@ -141,8 +141,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!70 &841274158
-CapsuleCollider2D:
+--- !u!61 &1290621684
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -154,9 +154,19 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.021848202, y: -0.09353542}
-  m_Size: {x: 0.61994267, y: 0.80117655}
-  m_Direction: 0
+  m_Offset: {x: 0.015737057, y: -0.113049686}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 0.32, y: 0.32}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.60781, y: 0.739509}
+  m_EdgeRadius: 0
 --- !u!95 &4820496784326776891
 Animator:
   serializedVersion: 4
@@ -189,7 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93694a59c1d6d4283a66f2183e0938cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 6
+  speed: 5
   jumpForce: 6
   isGround: 0
   jumpCount: 0
@@ -197,5 +207,6 @@ MonoBehaviour:
   ground:
     serializedVersion: 2
     m_Bits: 8
+  boxSize: {x: 0.54, y: 0.06}
   apple: 0
   appleText: {fileID: 0}
