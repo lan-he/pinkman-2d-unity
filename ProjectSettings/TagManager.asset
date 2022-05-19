@@ -49,7 +49,7 @@ TagManager:
   - name: New Layer 2
     uniqueID: 3710320993
     locked: 0
-  - name: New Layer 3
+  - name: Player
     uniqueID: 1102212719
     locked: 0
   - name: New Layer 4
@@ -60,9 +60,6 @@ TagManager:
     locked: 0
   - name: New Layer 6
     uniqueID: 2661762179
-    locked: 0
-  - name: 12231
-    uniqueID: 3381280299
     locked: 0
   - name: New Layer 8
     uniqueID: 462765681

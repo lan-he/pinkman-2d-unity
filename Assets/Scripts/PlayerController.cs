@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb; // 缸体
     private Animator anim; // 动画控制器
     private Collider2D coll; // 碰撞体
+    public ParticleSystem playerPs; // 粒子系统
     // 移动=========
     public int speed; // 声明速度
     private float moveX;
@@ -49,6 +50,7 @@ public class PlayerController : MonoBehaviour
         if (moveJump && jumpCount > 0)
         {
             isJump = true;
+            ParticleSystem();
         }
         SwitchAnim(); // 动画
     }
@@ -79,6 +81,7 @@ public class PlayerController : MonoBehaviour
         Vector3 playerScale = transform.localScale;
         playerScale.x *= -1;
         transform.localScale = playerScale;
+        ParticleSystem();
     }
     private void CheckGround()
     {
@@ -95,16 +98,17 @@ public class PlayerController : MonoBehaviour
 
     private void Jump() // 角色跳跃
     {
-        if (!isJump && isGround)
-        {
-            jumpCount = 2;
-        }
+
         if (isJump)
         {
             rb.velocity = Vector2.up * jumpForce;
             // rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             jumpCount--;
             isJump = false;
+        }
+        if (isGround)
+        {
+            jumpCount = 1;
         }
 
         if (rb.velocity.y < 0)
@@ -145,13 +149,18 @@ public class PlayerController : MonoBehaviour
         }
         anim.SetInteger("state", (int)states);
     }
+    private void ParticleSystem()
+    {
+        playerPs.Play();
+    }
 
     // 收集物品
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Collection")
         {
-            Destroy(collision.gameObject);
+            collision.gameObject.GetComponent<Animator>().SetBool("destroy",true);
+            // Destroy(collision.gameObject);
             apple += 1;
             appleText.text = apple.ToString();
         }
