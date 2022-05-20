@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+// 可翻转平台
 public class Platform : MonoBehaviour
 {
     PlatformEffector2D pe2d;
@@ -9,8 +9,6 @@ public class Platform : MonoBehaviour
     {
         pe2d = GetComponent<PlatformEffector2D>();
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKey(KeyCode.Alpha1))

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+// 角色控制
 public class PlayerController : MonoBehaviour
 {
     //[SerializeField] private Rigidbody2D rb; // 缸体 private私有变量
@@ -18,23 +18,32 @@ public class PlayerController : MonoBehaviour
     // 跳跃========
     [Range(1, 10)]
     public int jumpForce; // 跳跃系数
-    private bool moveJump; // 跳跃输入
+    private bool moveJump; // 跳跃输
     private bool jumpHold; // 长按跳跃
     public bool isGround; // 是否在地面上
     public int jumpCount = 2; // 跳跃次数
     private bool isJump; // 传递作用
     public Transform groundCheck; //地面监测点
     public LayerMask ground; // 声明碰撞体图层
-    [SerializeField] private Vector2 boxSize;
+    [SerializeField]
+    private Vector2 boxSize;
     private float fallAddition = 2.5f; // 下落重力加成
     private float jumpAddition = 1.5f; // 跳跃重力加成
+    public AudioSource jumpAudio;
     // UI========
     public int apple; // 收集apple数量
     public TextMeshProUGUI appleText; // 收集apple数量显示
     // 受伤=======
     private bool isHurt; // 是否受伤
     // 动画=======
-    private enum playerState { idle, run, jump, fall, hurt }; // 枚举 {静止,跑动,起跳,降落}
+    private enum playerState
+    {
+        idle,
+        run,
+        jump,
+        fall,
+        hurt
+    } // 枚举 {静止,跑动,起跳,降落}
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>(); //缸体赋值
@@ -52,25 +61,26 @@ public class PlayerController : MonoBehaviour
             isJump = true;
             ParticleSystem();
         }
-        SwitchAnim(); // 动画
+        SwitchAnim();
     }
-
-    // FixedUpdate固定时间执行
-    private void FixedUpdate()
+    private void FixedUpdate() // FixedUpdate固定时间执行
     {
         if (!isHurt)
         {
-            Movement(); // 角色移动
-            Jump(); // 角色跳跃
+            Movement();
+            Jump();
         }
         CheckGround();
     }
-
     void Movement() // 角色移动
     {
-        rb.velocity = new Vector2(moveX * speed, rb.velocity.y);
-        // anim.SetFloat("running", Mathf.Abs(moveX));
-        if ((facingRight == false && moveX > 0) || (facingRight == true && moveX < 0))
+        rb.velocity = new Vector2(moveX * speed, rb.velocity.y); // 横向施加一个力
+
+        // anim.SetFloat("running", Mathf.Abs(moveX)); 改变动画参数的状态
+        if (
+            (facingRight == false && moveX > 0) ||
+            (facingRight == true && moveX < 0)
+        )
         {
             Filp();
         }
@@ -86,23 +96,22 @@ public class PlayerController : MonoBehaviour
     private void CheckGround()
     {
         // isGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground); // 判断是否接触地面 圆形第二个参数是圆的半径
-        isGround = Physics2D.OverlapBox(groundCheck.position, boxSize, 0, ground); // 判断是否接触地面 方形第二个参数是v2,第三个参数是角度
+        isGround =
+            Physics2D.OverlapBox(groundCheck.position, boxSize, 0, ground); // 判断是否接触地面 方形第二个参数是v2,第三个参数是角度
     }
     private void OnDrawGizmos()
     {
-        // 可视化圆形物体
-        // Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
-        Gizmos.DrawWireCube(groundCheck.position, boxSize);
+        // Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius); // 可视化圆形物体
+        Gizmos.DrawWireCube(groundCheck.position, boxSize); // 可视化盒子
         Gizmos.color = Color.red;
     }
-
     private void Jump() // 角色跳跃
     {
-
         if (isJump)
         {
+            jumpAudio.Play();
             rb.velocity = Vector2.up * jumpForce;
-            // rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            // rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); // 施加一个瞬间的力
             jumpCount--;
             isJump = false;
         }
@@ -113,20 +122,20 @@ public class PlayerController : MonoBehaviour
 
         if (rb.velocity.y < 0)
         {
-            rb.gravityScale = fallAddition;
+            rb.gravityScale = fallAddition; // 修改缸体的重力
         }
         else if (rb.velocity.y > 0 && !jumpHold)
         {
-            rb.gravityScale = jumpAddition;
+            rb.gravityScale = jumpAddition; // 修改缸体的重力
         }
         else
         {
-            rb.gravityScale = 1f;
+            rb.gravityScale = 1f; // 重置缸体重力
         }
     }
     void SwitchAnim() // 控制动画
     {
-        playerState states;
+        playerState states; // 由枚举对象赋值
         if (Mathf.Abs(moveX) > 0)
         {
             states = playerState.run;
@@ -147,32 +156,39 @@ public class PlayerController : MonoBehaviour
         {
             states = playerState.hurt;
         }
-        anim.SetInteger("state", (int)states);
+        anim.SetInteger("state", (int)states); // 转换成成整数类型并赋值动画变量
     }
-    private void ParticleSystem()
+    private void ParticleSystem() // 粒子系统
     {
         playerPs.Play();
     }
-
-    // 收集物品
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision) // 收集物品 人物碰撞到2d标签时候的回调
     {
         if (collision.tag == "Collection")
         {
-            collision.gameObject.GetComponent<Animator>().SetBool("destroy",true);
+            collision
+                .gameObject
+                .GetComponent<Animator>()
+                .SetBool("destroy", true);
+
             // Destroy(collision.gameObject);
             apple += 1;
             appleText.text = apple.ToString();
         }
     }
-    private void OnCollisionEnter2D(Collision2D collision) // 消灭敌人
+    private void OnCollisionEnter2D(Collision2D collision) // 消灭敌人 缸体之间触碰的回调
     {
-        if (collision.gameObject.tag == "Enemy") // 碰撞的是敌人
+        if (
+            collision.gameObject.tag == "Enemy" // 碰撞的是敌人
+        )
         {
+            EnemyMushroom mushroom =
+                collision.gameObject.GetComponent<EnemyMushroom>();
             if (!isGround && rb.velocity.y < -0.1f)
             {
-                Destroy(collision.gameObject);
-                rb.velocity = new Vector2(rb.velocity.x, 8);
+                mushroom.HitAnimator();
+                // Destroy(collision.gameObject);
+                rb.velocity = new Vector2(rb.velocity.x, 6);
             }
             else if (
                 transform.position.x > collision.gameObject.transform.position.x
@@ -190,13 +206,13 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    public void HurtDown()
+    public void HurtDown() // 受伤结束 由动画事件触发
     {
         rb.velocity = new Vector2(0, 0);
         isHurt = false;
     }
     void KillPlayer()
     {
-        // Invoke("KillPlayer",dieTime);
+        // Invoke("KillPlayer",dieTime); // 延迟事件
     }
 }
