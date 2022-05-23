@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-// UI========
-
+// 触发器判断 收集物品
 public class PlayerCollect : MonoBehaviour
 {
     public int apple; // 收集apple数量
@@ -32,6 +31,10 @@ public class PlayerCollect : MonoBehaviour
             }
 
         }
+        if (collision.tag == "DieLine")
+        {
+            Invoke("Restart", 1f);
+        }
     }
     private void OnTriggerExit2D(Collider2D other)
     {
@@ -39,5 +42,9 @@ public class PlayerCollect : MonoBehaviour
         {
             panel.SetActive(false);
         }
+    }
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

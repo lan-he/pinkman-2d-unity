@@ -58,15 +58,15 @@ public class PlayerController : MonoBehaviour
             isJump = true;
             ParticleSystem();
         }
-        SwitchAnim();
-    }
-    private void FixedUpdate() // FixedUpdate固定时间执行
-    {
         if (!isHurt)
         {
             Movement();
             Jump();
         }
+        SwitchAnim();
+    }
+    private void FixedUpdate() // FixedUpdate固定时间执行
+    {
         CheckGround();
     }
     void Movement() // 角色移动
@@ -92,18 +92,22 @@ public class PlayerController : MonoBehaviour
     }
     private void CheckGround()
     {
-        // isGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground); // 判断是否接触地面 圆形第二个参数是圆的半径
+        // isGround = Physics2D.OverlapCircle(groundCheck.position, 0.1f, ground); // 判断是否接触地面 圆形第二个参数是圆的半径
         isGround =
             Physics2D.OverlapBox(groundCheck.position, boxSize, 0, ground); // 判断是否接触地面 方形第二个参数是v2,第三个参数是角度
     }
     private void OnDrawGizmos()
     {
-        // Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius); // 可视化圆形物体
+        // Gizmos.DrawWireSphere(groundCheck.position, 0.1f); // 可视化圆形物体
         Gizmos.DrawWireCube(groundCheck.position, boxSize); // 可视化盒子
         Gizmos.color = Color.red;
     }
     private void Jump() // 角色跳跃
     {
+        if (isGround)
+        {
+            jumpCount = 1;
+        }
         if (isJump)
         {
             jumpAudio.Play();
@@ -111,10 +115,6 @@ public class PlayerController : MonoBehaviour
             // rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); // 施加一个瞬间的力
             jumpCount--;
             isJump = false;
-        }
-        else if (isGround && rb.IsTouchingLayers(ground))
-        {
-            jumpCount = 1;
         }
 
         if (rb.velocity.y < 0)
@@ -177,14 +177,14 @@ public class PlayerController : MonoBehaviour
                 transform.position.x > collision.gameObject.transform.position.x
             )
             {
-                rb.velocity = new Vector2(5, rb.velocity.y);
+                rb.velocity = new Vector2(2, rb.velocity.y);
                 isHurt = true;
             }
             else if (
                 transform.position.x < collision.gameObject.transform.position.x
             )
             {
-                rb.velocity = new Vector2(-5, rb.velocity.y);
+                rb.velocity = new Vector2(-2, rb.velocity.y);
                 isHurt = true;
             }
         }
