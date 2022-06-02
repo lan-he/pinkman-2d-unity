@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public int jumpForce; // 跳跃系数
     private bool moveJump; // 跳跃输
     private bool jumpHold; // 长按跳跃
+    public bool isUpGround; // 上一帧是否在地面上
     public bool isGround; // 是否在地面上
     public int jumpCount = 2; // 跳跃次数
     private bool isJump; // 传递作用
@@ -27,8 +28,8 @@ public class PlayerController : MonoBehaviour
     public LayerMask ground; // 声明碰撞体图层
     [SerializeField]
     private Vector2 boxSize;
-    private float fallAddition = 2.5f; // 下落重力加成
-    private float jumpAddition = 1.5f; // 跳跃重力加成
+    private float fallAddition = 3f; // 下落重力加成
+    private float jumpAddition = 2f; // 跳跃重力加成
     public AudioSource jumpAudio;
     // 受伤=======
     private bool isHurt; // 是否受伤
@@ -67,6 +68,7 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate() // FixedUpdate固定时间执行
     {
+        isUpGround = isGround;
         CheckGround();
     }
     void Movement() // 角色移动
@@ -104,9 +106,9 @@ public class PlayerController : MonoBehaviour
     }
     private void Jump() // 角色跳跃
     {
-        if (isGround)
+        if (!isUpGround && isGround)
         {
-            jumpCount = 1;
+            jumpCount = 2;
         }
         if (isJump)
         {
@@ -129,6 +131,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.gravityScale = 1f; // 重置缸体重力
         }
+        
     }
     void SwitchAnim() // 控制动画
     {

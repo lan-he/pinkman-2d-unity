@@ -188,7 +188,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -222,9 +222,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b112d5eaf9c414d1191ddde61530968c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thisTransforms: {fileID: 4970889847938272008}
   leftPoint: {fileID: 4970889847568823575}
   rightPoint: {fileID: 4970889847269740272}
   stepon: {fileID: 2773848782806723817}
+  disColl: {fileID: 4970889847938272003}
   speed: 1.6
 --- !u!82 &2773848782806723817
 AudioSource:
