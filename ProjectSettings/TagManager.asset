@@ -7,8 +7,8 @@ TagManager:
   - Collection
   - Enemy
   - NextLevel
-  - NextLevel
   - DieLine
+  - Prickle
   layers:
   - Default
   - TransparentFX
@@ -49,12 +49,12 @@ TagManager:
   - name: Background
     uniqueID: 786829679
     locked: 0
-  - name: Ground
-    uniqueID: 3710320993
-    locked: 0
   - name: Player
     uniqueID: 1102212719
     locked: 0
   - name: Collection
     uniqueID: 3720843211
+    locked: 0
+  - name: Ground
+    uniqueID: 3710320993
     locked: 0
