@@ -2,7 +2,7 @@
 
 可以在线上访问项目: 
 
-[在线游玩](https://hemingxuann.github.io/pinkman-2d-unity/)
+[在线游玩](https://lan-he.github.io/pinkman-2d-unity/)
 
 # 游玩截图   
 
